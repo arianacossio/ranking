@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EntersBenefits - Ranking de Recompensas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(116, 24, 242, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(116, 24, 242, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 30%),
+                        radial-gradient(circle at 60% 70%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+            animation: float 25s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(40px, -40px) rotate(8deg); }
+            66% { transform: translate(-30px, 30px) rotate(-8deg); }
+        }
+
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: rgba(116, 24, 242, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(116, 24, 242, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '✨';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            opacity: 0.3;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #7418f2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .trophy-icon {
+            font-size: 3.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 16px 30px;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background: rgba(116, 24, 242, 0.3);
+            border-color: #7418f2;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(116, 24, 242, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7418f2 0%, #a855f7 100%);
+            border: none;
+            box-shadow: 0 5px 20px rgba(116, 24, 242, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #8b2cff 0%, #ba6eff 100%);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: #ef4444;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+        }
+
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .panel-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #7418f2;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 4px rgba(116, 24, 242, 0.2);
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        option {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #7418f2 0%, #a855f7 100%);
+            border-color: transparent;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .students-list {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .student-item {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .student-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .student-number {
+            background: linear-gradient(135deg, #7418f2 0%, #a855f7 100%);
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        .student-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background: var(--course-gradient);
+        }
+
+        .delete-mini-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .delete-mini-btn:hover {
+            background: rgba(239, 68, 68, 0.4);
+            border-color: #ef4444;
+            transform: scale(1.05);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(116, 24, 242, 0.5);
+            box-shadow: 0 10px 30px rgba(116, 24, 242, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #7418f2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* Vista de Previsualización - ESTILO LISTA 2 COLUMNAS */
+        .preview-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, #1a0b3f 0%, #0f0524 50%, #1e1147 100%);
+            z-index: 1000;
+            overflow: hidden;
+            display: none;
+        }
+
+        .preview-view.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Estrellas decorativas */
+        .star-decoration {
+            position: absolute;
+            color: rgba(168, 85, 247, 0.3);
+            font-size: 2rem;
+            animation: twinkle 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .preview-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+            overflow: hidden;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+
+        .preview-logo {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 5px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+
+        .preview-logo::after {
+            content: '⭐';
+            position: absolute;
+            top: -10px;
+            right: -30px;
+            font-size: 2rem;
+            color: #FFD700;
+        }
+
+        .preview-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .preview-title {
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Grid de 2 columnas */
+        .ranking-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 0;
+        }
+
+        .ranking-column {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: none;
+        }
+
+        .ranking-column::-webkit-scrollbar {
+            display: none;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .ranking-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .student-name-ranking {
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            flex: 1;
+        }
+
+        .course-tag {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .course-tag.desarrollo-web {
+            background: linear-gradient(135deg, #f73ca1 0%, #a60082 100%);
+            color: #fff;
+        }
+
+        .course-tag.ciberseguridad {
+            background: linear-gradient(135deg, #05d3aa 0%, #00708a 100%);
+            color: #fff;
+        }
+
+        .course-tag.analisis-datos {
+            background: linear-gradient(135deg, #21c9f6 0%, #0d309b 100%);
+            color: #fff;
+        }
+
+        .course-tag.soluciones-ia {
+            background: linear-gradient(135deg, #ee551b 0%, #b43d10 100%);
+            color: #fff;
+        }
+
+        .close-preview-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(239, 68, 68, 0.3);
+            border: 2px solid rgba(239, 68, 68, 0.6);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .close-preview-btn:hover {
+            background: rgba(239, 68, 68, 0.5);
+            border-color: #ef4444;
+            transform: scale(1.05);
+        }
+
+        .screenshot-tip {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(116, 24, 242, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 8px 30px rgba(116, 24, 242, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+            z-index: 1001;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0.4;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .nav-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .ranking-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-container {
+                padding: 20px;
+            }
+
+            .preview-logo {
+                font-size: 2rem;
+            }
+
+            .close-preview-btn {
+                top: 10px;
+                right: 10px;
+                padding: 8px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        for(let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animation = `particleFloat ${15 + Math.random() * 10}s linear infinite`;
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(particle);
+        }
+    </script>
+
+    <div class="container" id="adminContainer">
+        <div class="header">
+            <h1>
+                <span class="trophy-icon">🏆</span>
+                EntersBenefits
+            </h1>
+            <p class="subtitle">
+                <span>✨</span>
+                Sistema de reconocimiento por cumplimiento de pilares
+                <span>✨</span>
+            </p>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-success" onclick="openPreview()">
+                👁️ Abrir Ranking para Compartir
+            </button>
+            <button class="btn" onclick="exportToCSV()">
+                📥 Exportar CSV
+            </button>
+            <button class="btn btn-danger" onclick="clearAllData()">
+                🗑️ Limpiar Todo
+            </button>
+        </div>
+
+        <div id="adminView">
+            <div class="admin-panel">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('individual')">
+                        👤 Agregar Individual
+                    </div>
+                    <div class="tab" onclick="switchTab('bulk')">
+                        📋 Carga Masiva
+                    </div>
+                </div>
+
+                <div id="individualTab" class="tab-content active">
+                    <h2 class="panel-title">
+                        <span>➕</span>
+                        Agregar Estudiante Individual
+                    </h2>
+                    <form onsubmit="addStudent(event)">
+                        <div class="form-group">
+                            <label>👤 Nombre del Estudiante</label>
+                            <input type="text" id="studentName" required placeholder="Ej: María García Pérez">
+                        </div>
+                        <div class="form-group">
+                            <label>📚 Curso</label>
+                            <select id="studentCourse" required>
+                                <option value="">Selecciona un curso</option>
+                                <option value="desarrollo-web">💻 Desarrollo Web</option>
+                                <option value="ciberseguridad">🔒 Ciberseguridad</option>
+                                <option value="analisis-datos">📊 Análisis de Datos</option>
+                                <option value="soluciones-ia">🤖 Soluciones IA</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            ⚡ Agregar al Ranking
+                        </button>
+                    </form>
+                </div>
+
+                <div id="bulkTab" class="tab-content">
+                    <h2 class="panel-title">
+                        <span>📋</span>
+                        Carga Masiva de Estudiantes
+                    </h2>
+                    <form onsubmit="addBulkStudents(event)">
+                        <div class="form-group">
+                            <label>📚 Curso</label>
+                            <select id="bulkCourse" required>
+                                <option value="">Selecciona un curso</option>
+                                <option value="desarrollo-web">💻 Desarrollo Web</option>
+                                <option value="ciberseguridad">🔒 Ciberseguridad</option>
+                                <option value="analisis-datos">📊 Análisis de Datos</option>
+                                <option value="soluciones-ia">🤖 Soluciones IA</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>👥 Lista de Estudiantes (uno por línea)</label>
+                            <textarea id="bulkStudents" required placeholder="María García Pérez
+Juan Vásquez López
+José Pérez Torres
+Ana María González
+Carlos Ruiz Díaz"></textarea>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin-top: 8px;">
+                                💡 Pega la lista de nombres, uno por línea. Se agregarán todos al curso seleccionado.
+                            </p>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            ⚡ Agregar Todos al Ranking
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number" id="totalStudents">0</div>
+                    <div class="stat-label">Estudiantes Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-number" id="totalCourses">0</div>
+                    <div class="stat-label">Cursos Activos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Pilares</div>
+                </div>
+            </div>
+
+            <div class="students-list" id="adminStudentsList">
+                <h2 class="panel-title">
+                    <span>📝</span>
+                    Estudiantes Agregados
+                </h2>
+                <div id="studentsListContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vista de Previsualización - ESTILO LISTA 2 COLUMNAS -->
+    <div class="preview-view" id="previewView">
+        <!-- Estrellas decorativas -->
+        <span class="star-decoration" style="top: 10%; left: 5%; animation-delay: 0s;">✦</span>
+        <span class="star-decoration" style="top: 15%; right: 8%; animation-delay: 0.5s;">✦</span>
+        <span class="star-decoration" style="top: 25%; left: 15%; animation-delay: 1s;">✦</span>
+        <span class="star-decoration" style="top: 35%; right: 12%; animation-delay: 1.5s;">✦</span>
+        <span class="star-decoration" style="bottom: 30%; left: 10%; animation-delay: 2s;">✦</span>
+        <span class="star-decoration" style="bottom: 20%; right: 15%; animation-delay: 2.5s;">✦</span>
+        <span class="star-decoration" style="bottom: 10%; left: 20%; animation-delay: 3s;">✦</span>
+        <span class="star-decoration" style="bottom: 15%; right: 5%; animation-delay: 3.5s;">✦</span>
+        
+        <button class="close-preview-btn" onclick="closePreview()">
+            ✕ Cerrar
+        </button>
+        <div class="screenshot-tip">
+            📸 Toma un screenshot de esta pantalla
+        </div>
+        <div class="preview-container">
+            <div class="preview-header">
+                <div class="preview-logo">ENTERS BENEFITS</div>
+                <div class="preview-subtitle">Ranking Estudiante de Excelencia</div>
+                <div class="preview-title">¿QUIÉN ESTÁ DOMINANDO EL JUEGO? (3 PILARES)</div>
+            </div>
+            <div class="ranking-grid" id="rankingGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const courseConfig = {
+            'desarrollo-web': {
+                name: 'Desarrollo Web',
+                tag: 'CODE',
+                gradient: 'linear-gradient(135deg, #f73ca1 0%, #a60082 100%)',
+                icon: '💻'
+            },
+            'ciberseguridad': {
+                name: 'Ciberseguridad',
+                tag: 'CYBER',
+                gradient: 'linear-gradient(135deg, #05d3aa 0%, #00708a 100%)',
+                icon: '🔒'
+            },
+            'analisis-datos': {
+                name: 'Análisis de Datos',
+                tag: 'DATA',
+                gradient: 'linear-gradient(135deg, #21c9f6 0%, #0d309b 100%)',
+                icon: '📊'
+            },
+            'soluciones-ia': {
+                name: 'Soluciones IA',
+                tag: 'IA',
+                gradient: 'linear-gradient(135deg, #ee551b 0%, #b43d10 100%)',
+                icon: '🤖'
+            }
+        };
+
+        let students = [];
+
+        window.onload = function() {
+            loadStudents();
+            renderAdminView();
+            updateStats();
+        };
+
+        function loadStudents() {
+            const stored = localStorage.getItem('rankingStudents');
+            if (stored) {
+                students = JSON.parse(stored);
+            }
+        }
+
+        function saveStudents() {
+            localStorage.setItem('rankingStudents', JSON.stringify(students));
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'individual') {
+                document.querySelector('.tab:first-child').classList.add('active');
+                document.getElementById('individualTab').classList.add('active');
+            } else {
+                document.querySelector('.tab:last-child').classList.add('active');
+                document.getElementById('bulkTab').classList.add('active');
+            }
+        }
+
+        function addStudent(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('studentName').value.trim();
+            const course = document.getElementById('studentCourse').value;
+            
+            if (!name || !course) return;
+            
+            const student = {
+                id: Date.now(),
+                name: name,
+                course: course,
+                addedAt: new Date().toISOString()
+            };
+            
+            students.push(student);
+            saveStudents();
+            
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentCourse').value = '';
+            
+            renderAdminView();
+            updateStats();
+
+            const form = event.target;
+            form.style.transform = 'scale(0.98)';
+            setTimeout(() => form.style.transform = 'scale(1)', 200);
+        }
+
+        function addBulkStudents(event) {
+            event.preventDefault();
+            
+            const course = document.getElementById('bulkCourse').value;
+            const namesText = document.getElementById('bulkStudents').value.trim();
+            
+            if (!course || !namesText) return;
+            
+            const names = namesText.split('\n')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+            
+            if (names.length === 0) {
+                alert('⚠️ No se encontraron nombres válidos');
+                return;
+            }
+            
+            let added = 0;
+            names.forEach(name => {
+                const student = {
+                    id: Date.now() + Math.random(),
+                    name: name,
+                    course: course,
+                    addedAt: new Date().toISOString()
+                };
+                students.push(student);
+                added++;
+            });
+            
+            saveStudents();
+            
+            document.getElementById('bulkStudents').value = '';
+            document.getElementById('bulkCourse').value = '';
+            
+            renderAdminView();
+            updateStats();
+            
+            alert(`✅ ${added} estudiante${added !== 1 ? 's' : ''} agregado${added !== 1 ? 's' : ''} exitosamente`);
+        }
+
+        function deleteStudent(id) {
+            if (confirm('¿Estás seguro de eliminar este estudiante del ranking?')) {
+                students = students.filter(s => s.id !== id);
+                saveStudents();
+                renderAdminView();
+                updateStats();
+            }
+        }
+
+        function renderAdminView() {
+            const content = document.getElementById('studentsListContent');
+            
+            if (students.length === 0) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📚</div>
+                        <h3>No hay estudiantes agregados</h3>
+                        <p>Comienza agregando estudiantes al ranking</p>
+                    </div>
+                `;
+                return;
+            }
+
+            content.innerHTML = students.map((student, index) => {
+                const config = courseConfig[student.course];
+                return `
+                    <div class="student-item">
+                        <div class="student-info">
+                            <div class="student-number">${index + 1}</div>
+                            <div class="student-details">
+                                <h4>${student.name}</h4>
+                                <span class="course-badge" style="background: ${config.gradient}">
+                                    ${config.icon} ${config.name}
+                                </span>
+                            </div>
+                        </div>
+                        <button class="delete-mini-btn" onclick="deleteStudent(${student.id})">
+                            🗑️ Eliminar
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('totalStudents').textContent = students.length;
+            const uniqueCourses = new Set(students.map(s => s.course));
+            document.getElementById('totalCourses').textContent = uniqueCourses.size;
+        }
+
+        function openPreview() {
+            if (students.length === 0) {
+                alert('⚠️ Agrega al menos un estudiante antes de abrir la vista previa');
+                return;
+            }
+
+            const grid = document.getElementById('rankingGrid');
+            
+            // Dividir estudiantes en 2 columnas
+            const midPoint = Math.ceil(students.length / 2);
+            const column1 = students.slice(0, midPoint);
+            const column2 = students.slice(midPoint);
+
+            const renderColumn = (studentsList) => {
+                return studentsList.map(student => {
+                    const config = courseConfig[student.course];
+                    return `
+                        <div class="ranking-item">
+                            <div class="student-name-ranking">${student.name}</div>
+                            <div class="course-tag ${student.course}">${config.tag}</div>
+                        </div>
+                    `;
+                }).join('');
+            };
+
+            grid.innerHTML = `
+                <div class="ranking-column">
+                    ${renderColumn(column1)}
+                </div>
+                <div class="ranking-column">
+                    ${renderColumn(column2)}
+                </div>
+            `;
+
+            document.getElementById('previewView').classList.add('active');
+            document.getElementById('adminContainer').style.display = 'none';
+        }
+
+        function closePreview() {
+            document.getElementById('previewView').classList.remove('active');
+            document.getElementById('adminContainer').style.display = 'block';
+        }
+
+        function exportToCSV() {
+            if (students.length === 0) {
+                alert('⚠️ No hay estudiantes para exportar');
+                return;
+            }
+            
+            const headers = ['Nombre', 'Curso', 'Fecha de Agregado'];
+            const rows = students.map(s => [
+                s.name,
+                courseConfig[s.course].name,
+                new Date(s.addedAt).toLocaleString('es-PE')
+            ]);
+            
+            let csv = '\uFEFF' + headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `EntersBenefits_Ranking_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert('✅ CSV exportado exitosamente');
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ ADVERTENCIA: Esto eliminará TODOS los estudiantes del ranking. ¿Estás seguro?')) {
+                if (confirm('❗ Esta acción no se puede deshacer. ¿Confirmas que quieres eliminar todo?')) {
+                    students = [];
+                    saveStudents();
+                    renderAdminView();
+                    updateStats();
+                    alert('✅ Todos los datos han sido eliminados correctamente');
+                }
+            }
+        }
+
+        // Cerrar vista previa con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePreview();
+            }
+        });
+    </script>
+</body>
+</html>
